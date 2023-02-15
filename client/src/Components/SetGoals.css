@@ -1,0 +1,83 @@
+.setgoals{
+    background-color: white;
+    width: 40%;
+    height: 50%;
+
+    position: absolute;
+
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+
+    padding: 2rem;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    border-radius: 2px;
+    z-index: 11;
+}
+
+hr{
+    border: none;
+    border-top: 1px solid rgb(195, 195, 195);
+    border-radius: 2px;
+}
+
+.setgoals textarea{
+    width: 100%;
+    height: 80%;
+    padding: 0.4rem;
+    outline: none;
+
+    font-size: 0.8rem;
+
+    background-color: #EFF5F5;
+
+    border: none;
+    resize: none;
+
+    border-radius: 2px;
+}
+
+.setgoals-up{
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+.setgoals-up p{
+    padding: .2rem 0.4rem;
+    background-color: #F9F54B;
+    border-radius: 2px;
+}
+
+.setgoals-down{
+    width: 100%;
+    height: 80%;
+
+    display: flex;
+
+    flex-direction: column;
+    justify-content: end;
+    gap: 0.8rem;
+}
+.setgoals-down button{
+    border: 1px solid lightslategray;
+    width: fit-content;
+    align-self: flex-end;
+    padding: 0.6rem 1rem;
+    border-radius: .4rem;
+    text-transform: uppercase;
+}
+
+
+
+.close-button{
+    position: absolute;
+    right: 1%;
+    top: 1%;
+
+    width: 1.8rem;
+    height: 1.8rem;
+}

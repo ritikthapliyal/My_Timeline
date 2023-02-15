@@ -1,0 +1,12 @@
+.deadline{
+    width: 45%;
+    height: 100%;
+    background-color: white;
+    transition: all 0.5s;
+}
+
+.deadline-2{
+    width: 90%;
+    height: 90%;
+    transform: translateX(-10%);
+}

@@ -1,0 +1,94 @@
+.Calendar-container{
+    width: 45%;
+    height: 80%;
+    display: grid;
+    grid-template-columns: repeat(7,1fr);
+    justify-items: center;
+    position: relative;
+
+    background-color: #bffceeeb;
+    /* box-shadow: 0px 0px 14px #F7EFE5; */
+
+    padding: 1rem;
+
+    transition: all 0.5s;
+
+    border-radius: 4px;
+}
+
+.Calendar-container-2{
+    width: 55%;
+    scale: 0.6;
+    transform: translateX(-2%);
+}
+
+.days{
+    display: flex;
+    align-items: center;
+    padding: 1rem 0rem;
+}
+
+.Calendar-container button{
+
+    width: 3rem;
+    height: 3rem;
+
+    border-radius: 50%;
+
+    background-color: white;
+    border: 1px solid lightgray;
+
+    transition: all 0.4s;
+
+}
+.Calendar-container button:hover{
+    scale: 1.1;
+}   
+
+.no-date{
+    background-color: lightgray !important;
+    color: lightgray;
+    cursor: not-allowed;
+}
+
+
+
+.prev-month,.next-month{
+    width: 3.4rem;
+    height: 3.4rem;
+    background-color: #98A8F8 !important;
+    border-radius: 50%;
+    display: flex;
+    grid-column-start: 1;
+    grid-column-end: 8;
+    border: none !important;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s;
+}
+.prev-month{
+    align-self: center;
+    justify-self: flex-start;
+    margin-left: 1.2rem;
+}
+.next-month{
+    align-self: center;
+    justify-self: flex-end;
+    margin-right: 1.2rem;
+}
+.prev-month svg,.next-month svg{
+    width: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.prev-month:hover{
+    background-color: #7286ee;
+    transform: translate(-2%);
+}
+.next-month:hover{
+    background-color: #7286ee;
+    transform: translate(2%);
+}
+
+
