@@ -15,7 +15,6 @@ export const verifyUser = createAsyncThunk('user/verifyUser', async (userData)=>
         catch(error){
 
             if(error.response){
-                console.log(error.response)
                 throw error.response.status
             }
             else{
@@ -25,16 +24,10 @@ export const verifyUser = createAsyncThunk('user/verifyUser', async (userData)=>
 })
 
 
-export const updateCart = createAsyncThunk('user/updateCart',async (data) => {
-    const response = await api.updateCart(data)
+export const setGoal = createAsyncThunk('user/setGoal',async (data) => {
+    const response = await api.setGoal(data)
     return response.data
 })
-
-export const getUserInfo = createAsyncThunk('user/getUserInfo',async (email) => {
-    const response = await api.getUserInfo(email)
-    return response.data
-})
-
 
 
 
@@ -98,20 +91,9 @@ const userSlice = createSlice({
         
         
         
-        [updateCart.pending]:(state)=>{ return {...state,updateCartStatus:"pending"}},
-        [updateCart.rejected] : (state) => { return {...state,updateCartStatus:"rejected"}},
-        [updateCart.fulfilled] : (state,{payload}) => {return {...state,updateCartStatus:"success",userData:payload.message}},
-
-        //////////////////////////////////////////////////////////////////////////////
-        
-        [getUserInfo.rejected] : () => {},
-        [getUserInfo.fulfilled] : (state,{payload}) => {
-                return {
-                    ...state,
-                    userData : payload.message,
-                    getUserInfoStatus : "success"
-                }
-        },
+        [setGoal.pending]:(state)=>{ return {...state,updateCartStatus:"pending"}},
+        [setGoal.rejected] : (state) => { return {...state,updateCartStatus:"rejected"}},
+        [setGoal.fulfilled] : (state,{payload}) => {return {...state,updateCartStatus:"success",userData:payload.result}},
         
 
     }

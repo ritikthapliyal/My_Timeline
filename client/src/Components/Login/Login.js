@@ -1,6 +1,7 @@
 import React, { useRef, useState, Fragment} from 'react'
 import {addUser,verifyUser} from '../../Redux/userSlice'
 import {useDispatch,useSelector} from 'react-redux'
+import { changeDatesArray } from '../../Redux/uiSlice'
 
 import './Login.css'
 
@@ -41,7 +42,7 @@ function Login({toggleLoginOverlay}) {
 
     const handleLogin = (e)=>{
         e.preventDefault()
-        dispatch(verifyUser(loginData))
+        dispatch(verifyUser(loginData)).then(dispatch(changeDatesArray()))
     }
     const handleSignup = (e)=>{
         e.preventDefault()

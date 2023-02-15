@@ -1,6 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;1,100;1,200;1,300;1,400;1,500;1,600&display=swap');
 
 
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400&display=swap');
+
+
+
 *{
     margin: 0;
     padding: 0;
@@ -25,14 +29,32 @@ h1{
 
 
 
-.timeline{
-    height: 90vh;
+.App{
+    overflow: hidden;
+    position: relative;
+    z-index: 1;
+}
 
+
+.timeline{
+
+    height: 90vh;
     display: flex;
     padding: 1rem;
-
-    justify-content: space-around;
     align-items: center;
+    gap: 2rem;
+    justify-content: center;
+
+    overflow: hidden;
+}
+
+.timeline-grid{
+    display: grid;
+    width: max-content;
+    grid-template-columns: 1fr .9fr 1fr;
+    width: max-content;
+
+    height: 90vh;
 }
 
 .overlay-wrapper{
@@ -41,6 +63,8 @@ h1{
     position: fixed;
     background-color: rgba(0, 0, 0, 0.7);
     z-index: 10;
+
+    transition: all 0.2s;
 }
 
 body{
@@ -50,4 +74,46 @@ body{
     background-size: contain;
     background-attachment: fixed;
     background-position: center;
+}
+
+
+
+.Calendar-details{
+    position: absolute;
+    background-color: white;
+    
+    left: 8%;
+    width: 22%;
+    bottom: -14%;
+    padding: 1rem;
+    border-radius: 2px;
+
+    transition: all 0.3s;
+}
+.Calendar-details-2{
+    bottom: 0;
+    transform: translate(0%,-150%);
+}
+
+.move-left,.move-right{
+    position: absolute;
+    height: 90vh;
+    width: 4%;
+    z-index: 11;
+    transition: all 0.3s;
+
+    bottom: 0;
+}
+.move-left:hover,.move-right:hover{
+    background-color: #434343c2;
+}
+.move-left svg,.move-right svg{
+    width: 100%;
+    stroke: snow;
+}
+.move-left{
+    left: 0;
+}
+.move-right{
+    right: 0;
 }

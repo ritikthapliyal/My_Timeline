@@ -18,10 +18,9 @@ export const addUser = async (req,res) => {
 
         const hashPassword = await bcrypt.hash(password,12)
         
-        await User.create({email,mobile,address,password:hashPassword,goals:[{},{},{},{},{},{},{},{},{},{},{}],joinDate:date})        
+        await User.create({email,mobile,address,password:hashPassword,goals:[{},{},{},{},{},{},{},{},{},{},{},{}],joinDate:date})        
         
         const user = await User.findOne({email:email},{password:0})
-        console.log(user)
         return res.status(201).json({result:user})   
 
     }
@@ -36,6 +35,8 @@ export const verifyUser = async(req,res) => {
 
     const email = req.body.username
     const password = req.body.password
+
+    console.log(password)
 
     try{
         
@@ -56,48 +57,24 @@ export const verifyUser = async(req,res) => {
 }
 
 
+export const setGoal = async (req,res)=>{
 
-export const updateCart = async (req,res)=>{
+        const {_id,year,month,date,goal} = req.body
 
-    if(req.body.bag){
-        const _id = req.body._id
-        const bag = req.body.bag
-    
-        const DateAndTime = new Date();
+        console.log(_id,year,month,date,goal)
         
         try{
     
-            await User.findOneAndUpdate({_id},{
-                $push: { orderHistory : { $each : [{DateAndTime,bag}] , $position : 0}}
-            })
+            await User.updateOne({_id},{ "$set": { [`goals.${month}.${year}.${date}`]: goal } })
     
             const updatedInfo = await User.findOne({_id},{password:0})
-            res.status(200).json({message:updatedInfo})
+            res.status(200).json({result:updatedInfo})
         }
         catch(err){
             res.status(400).json({message:err})
         }
-
-    }
-    else{
-        const _id = req.body._id
-        const fav = req.body.fav
-        
-        
-        try{
-            await User.updateOne({_id},{$set:{ favorites:fav}})
-    
-            const updatedInfo = await User.findOne({_id},{password:0})
-            res.status(200).json({message:updatedInfo})
-        }
-        catch(err){
-            res.status(400).json({message:err})
-        }
-    }
-
 
 }
-
 
 
 

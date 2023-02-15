@@ -1,12 +1,170 @@
 .deadline{
     width: 45%;
-    height: 100%;
+    height: 80%;
     background-color: white;
     transition: all 0.5s;
+    align-self: flex-end;
+
+    border-radius: 4px;
+    padding: 1rem;
+
+    overflow-y: scroll;
+
+    scroll-behavior: smooth;
+}
+
+.deadline::-webkit-scrollbar{
+    width: 1rem;
+}
+
+.deadline::-webkit-scrollbar-track{
+    background-color: white;
+    border-radius: 2rem;
+    margin-block: 1rem;
+}
+.deadline::-webkit-scrollbar-thumb{
+    width: .8rem;
+    background-color: #3b345a;
+    border-radius: 2rem;
+
+    border: .2rem solid white;
 }
 
 .deadline-2{
-    width: 90%;
+    width: 85%;
     height: 90%;
     transform: translateX(-10%);
 }
+
+.deadline-heading{
+    text-align: center;
+    color: #060047;
+    padding: 1rem;
+    margin-bottom: .2rem;
+}
+
+
+.goals-container{
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+}
+
+.goals-container::after{
+    
+    color: rgb(181, 174, 174);
+
+    content: '" Success is no accident. It is hard work, perseverance, learning, studying, sacrifice and most of all, love of what you are doing or learning to do." ~ Pele';
+
+    text-align: center;
+
+    padding: 1rem;
+    width: 90%;
+    margin: 2rem 0rem;
+}
+
+.goal{
+
+    scale: 0.9;
+
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    padding: 0.8rem 1rem;
+
+    gap: 0.6rem;
+
+    /* border: 1px solid #635985; */
+    
+    border-radius: 4px;
+
+    box-shadow: 0px 0px 4px lightgray;
+    transition: all 0.4s;
+}
+
+.goal:hover{
+    scale: 1.02;
+    box-shadow: 0px 0px 4px rgb(188, 188, 188);
+}
+
+.goal-date{
+
+    color: #443C68;
+    width: fit-content;
+    background-color: #F9F54B;
+    padding: 0.6rem 0.4rem;
+
+    border-radius: 2px;
+
+    position: relative;
+}
+
+.goal div{
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.goal-title{
+    font-size: 1.4rem;
+    font-family: 'rubik';
+    color : #301E67;
+}
+
+.goal-motivation{
+    width: 27.6rem;
+    padding: 0.6rem 0.4rem;
+    color: #3D1766;
+    background-color: #E5E0FF;
+
+    font-size: 0.8rem;
+}
+
+.delete-goal,.completed{
+    width: fit-content;
+    border-radius: 1rem;
+    padding: 0.6rem;
+    align-self: flex-start;
+    background-color: lightgreen;
+}
+.completed{
+    font-family: 'rubik';
+    color: white;
+    background-color: rgb(68, 206, 199);
+}
+
+
+.goal-index{
+    height: 2.8rem;
+    width: 2.8rem;
+    position: absolute;
+    left: -32%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: #0f6e6b;
+    color: white;
+    top: -100%;
+
+    scale: 0.9;
+}
+
+
+.goal-buttons{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.4rem !important;
+}
+.time-left{
+    display: flex;
+    align-self: flex-end;
+}
+
+.goal-btn-container{
+    justify-content: space-between;
+}
+
