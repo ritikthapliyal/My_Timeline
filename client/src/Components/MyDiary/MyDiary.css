@@ -1,5 +1,6 @@
 .mydiary{
-    width: 100%;
+    width: 54%;
     background-color: white;
-    height: 100%;
+    margin: 1rem;
+    justify-self: end;
 }

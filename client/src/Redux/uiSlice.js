@@ -114,23 +114,43 @@ export const uiSlice = createSlice({
             if(payload === "L"){
 
                 if(state.showAccomplishments){
-
+                    state.translateXValue = "translateX(-35%)"
+                    state.showAccomplishments = false
+                    state.showMainPage = true
+                }
+                else if(state.showMainPage){
+                    state.translateXValue = "translateX(-14%)"
+                    state.showMainPage = false
+                    state.showMyDiary = true
                 }
 
             }
-
-
-
+            else{
+                if(state.showMyDiary){
+                    state.translateXValue = "translateX(-35%)"
+                    state.showMainPage = true
+                    state.showMyDiary = false
+                }
+                else if(state.showMainPage){
+                    state.translateXValue = "translateX(-64%)"
+                    state.showMyDiary = false
+                    state.showAccomplishments = true
+                }   
+            }
 
             if(state.showMyDiary){
                 state.showMoveLeft = false
+            }
+            else{
+                state.showMoveLeft = true
             }
 
             if(state.showAccomplishments){
                 state.showMoveRight = false
             }
-
-
+            else{
+                state.showMoveRight = true
+            }
 
         }
         

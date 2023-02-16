@@ -4,15 +4,22 @@ import Deadline from './Components/Deadline';
 import Header from './Components/Header';
 import MyDiary from './Components/MyDiary/MyDiary';
 import { changePage } from './Redux/uiSlice';
+import {setFirstTimeLogin} from './Redux/userSlice';
+import Accomplishments from './Components/Accomplishments/Accomplishments';
 import { useSelector,useDispatch } from 'react-redux';
 
 function App() {
 
     const dispatch = useDispatch()
-    const {mouseOverDeadline, showMoveLeft, showMoveRight,translateXValue} = useSelector((state)=> state.uiSlice)
-    const {userLoggedIn} = useSelector((state)=> state.userSlice)
+    const {showMoveLeft, showMoveRight,translateXValue} = useSelector((state)=> state.uiSlice)
+    const {userLoggedIn,firstTimeLogin} = useSelector((state)=> state.userSlice)
     
     const handleMoveButtons = (direction) => {
+
+        if(firstTimeLogin){
+            dispatch(setFirstTimeLogin())
+        }
+
         dispatch(changePage(direction))
     }
 
@@ -27,9 +34,13 @@ function App() {
                     </svg>
                 </button>
             }
+
             <Header/>
             <div className={userLoggedIn ? "timeline-grid" : ""}
-                 style = {{transform : userLoggedIn ? translateXValue : ""}}>
+                 style = {{ 
+                            transform : userLoggedIn ? translateXValue : "",
+                            transition : firstTimeLogin ? "" : "all 0.4s"
+                        }}>
                 {
                     userLoggedIn && <MyDiary/>
                 }
@@ -42,7 +53,9 @@ function App() {
                         <p>Date</p>
                     </div> */}
                 </div>
-                
+                {
+                    userLoggedIn && <Accomplishments/>
+                }
             </div>
 
             {

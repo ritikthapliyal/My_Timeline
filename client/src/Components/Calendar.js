@@ -1,4 +1,4 @@
-import React, { useState, Fragment} from 'react'
+import React, { useState, Fragment, useRef} from 'react'
 import './Calendar.css'
 import SetGoalsOverlay from './SetGoalsOverlay';
 import { useSelector, useDispatch } from 'react-redux';
@@ -9,9 +9,9 @@ import { incrementYearAndMonth, decrementYearAndMonth,setCurrentSelectedDate } f
 function Calendar() {
 
     const dispatch = useDispatch()
-    const {dates,today,currMonth,currYear,currSelectedDate,mouseOverDeadline} = useSelector((state)=> state.uiSlice)
+    const calendarContainer = useRef()
+    const {dates,today,currMonth,currYear,mouseOverDeadline, showMyDiary} = useSelector((state)=> state.uiSlice)
     const {userData,userLoggedIn} = useSelector((state)=> state.userSlice)
-    const [position, setPosition] = useState({});
     const [clickedBtn, setClickedBtn] = useState({});
 
 
@@ -32,15 +32,8 @@ function Calendar() {
         if(userLoggedIn){
             
             dispatch(setCurrentSelectedDate(e.target.value))
-            
-
+        
             setClickedBtn(e.target.getBoundingClientRect());
-
-
-            setPosition({
-                top: e.clientY,
-                left: e.clientX
-            });
     
             setDisplayOverlay(!displayOverlay)
         
@@ -71,16 +64,31 @@ function Calendar() {
         }
     }
 
+    const getClassName = () => {
+
+        if(mouseOverDeadline || showMyDiary){
+            if(mouseOverDeadline){
+                calendarContainer.current.classList.remove("Calendar-container-3")
+                return "Calendar-container-2"
+            }
+            else{
+                calendarContainer.current.classList.remove("Calendar-container-2")
+                return "Calendar-container-3"
+            }
+        }
+        else return ""
+    }
+
     return (
         <Fragment>
 
             {
                 userLoggedIn && 
                 displayOverlay && 
-                <SetGoalsOverlay setDisplayOverlay={setDisplayOverlay} position={position} clickedBtn={clickedBtn}/>
+                <SetGoalsOverlay setDisplayOverlay={setDisplayOverlay} clickedBtn={clickedBtn}/>
             }
 
-            <div className={`Calendar-container ${mouseOverDeadline ? "Calendar-container-2" : ""}`}>
+            <div ref={calendarContainer} className={`Calendar-container ${getClassName()}`}>
                 <h2 className='Calendar-MonthYear'>{`${monthSpell}`}<br></br><span>{`${currYear}`}</span></h2>
 
 

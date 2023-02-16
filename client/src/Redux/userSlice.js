@@ -34,6 +34,7 @@ export const setGoal = createAsyncThunk('user/setGoal',async (data) => {
 const initialState = {
     userData : {},
     userLoggedIn: false,
+    firstTimeLogin : false,
     
     addUserStatus : "",
     addUserStatusMessage:"",
@@ -50,12 +51,9 @@ const userSlice = createSlice({
     initialState : initialState,
     reducers: {
         
-        setUpdateCartStatus(state){
-            state.updateCartStatus  = ""
-        },
 
-        logoutUser(state){
-            state.userLoggedIn = false
+        setFirstTimeLogin(state){
+            state.firstTimeLogin = false
         },
 
     },
@@ -83,6 +81,7 @@ const userSlice = createSlice({
                                 verifyUserStatus : "success",
                                 userLoggedIn : true, 
                                 displayOverlay: false,
+                                firstTimeLogin: true,
                                 userData : payload.result,
                             }},
         
@@ -101,4 +100,4 @@ const userSlice = createSlice({
 
 
 export default userSlice.reducer 
-export const userActions = userSlice.actions
+export const {setFirstTimeLogin} = userSlice.actions

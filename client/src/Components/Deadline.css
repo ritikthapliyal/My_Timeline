@@ -3,6 +3,7 @@
     height: 80%;
     background-color: white;
     transition: all 0.5s;
+    transition-delay: all 0.1s;
     align-self: flex-end;
 
     border-radius: 4px;

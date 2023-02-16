@@ -18,9 +18,15 @@
 }
 
 .Calendar-container-2{
-    width: 55%;
     scale: 0.6;
-    transform: translate(-2%,-34%);
+    transform: translateX(-2%);
+    transform: translateY(-34%);
+    width: 55%;
+}
+.Calendar-container-3{
+    width: 36%;
+    scale: 0.6;
+    transform: translate(-66%,-54%);
 }
 
 .days{
