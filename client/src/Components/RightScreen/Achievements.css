@@ -1,6 +1,12 @@
 .Achievements{
     width: 70%;
     background-color: white;
+    display: flex;
+    flex-direction: column;
+}
+.Achievements h3{
+    text-align: center;
+    padding-top: 1rem;
 }
 
 .year-dashboard{

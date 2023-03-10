@@ -56,6 +56,7 @@ function Achievements() {
 
     return (
         <div className='Achievements'>
+            <h3>Achievements</h3>
             <div className='year-dashboard'>
                 {
                     monthDivs
