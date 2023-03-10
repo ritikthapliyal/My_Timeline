@@ -9,7 +9,6 @@ function SetGoals({setDisplayOverlay,clickedBtn}) {
     const topOrBottom = ()=>{
 
         if (clickedBtn.top + clickedBtn.height + 380 > window.innerHeight) {
-            console.log("hehe")
             return {
                 bottom : window.innerHeight - clickedBtn.top - 25,
                 left : clickedBtn.right - 25

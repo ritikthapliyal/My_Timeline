@@ -1,0 +1,265 @@
+.Today{
+    width: 24rem;
+    background-color: white;
+    transition: all 0.3s;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid black;
+
+}
+
+.flip-page{
+    width: 3rem;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    right: -2%;
+    top: 45%;
+    border: 1px solid;
+    border-left: none;
+    border-top: none;
+    border-bottom: none;
+    z-index: 11;
+}
+.flip-page svg{
+    width: 2rem;
+    height: 2rem;
+    transition: all 0.3s;
+}
+.flip-page svg:hover{
+    transform: translateX(5%);
+}
+
+
+.tasks-done,.tasks-pending{
+    display: flex;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    transition: all 0.4s;
+    padding: 0.4rem;
+    background-color: white;
+    display: grid;
+    grid-template-rows: 1fr 8fr 1fr;
+    gap: 1rem;
+}
+
+.tasks-pending-header{
+    display: flex;
+    width: 100%;
+    height: fit-content;
+    justify-content: space-between;
+    align-items: center;
+}
+.tasks-pending-header button{
+    width: 3rem;
+    height: 3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.tasks-pending-header img{
+    object-fit: contain;
+    width: 2rem;
+    height: 2rem;
+}
+
+.todo-tasks{
+    height: 80%;
+    width: 90%;
+    padding-left: 1rem;
+}
+
+.input-task{
+    display: flex;
+    height: fit-content;
+    align-self: end;
+    align-items: center;
+    gap: .1rem;
+    box-shadow: 0px 0px 8px rgb(215 207 207 / 84%);
+}
+.input-task button{
+    width: 3rem;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+    border-radius: 2px;
+    position: relative;
+}
+.input-task button div{
+    display: flex;
+    padding: .1rem;
+    position: absolute;
+    top: 0;
+    background-color: #f05454d9;
+    color: white;
+    border-radius: 50%;
+    width: 1.4rem;
+    height: 1.4rem;
+    align-items: center;
+    justify-content: center;
+    right: 0;
+}
+.input-task input{
+    width: 85%;
+    height: 100%;
+    padding: 0.4rem 0.6rem;
+    border: none;
+    outline: none;
+    font-size: 1rem;
+    border-radius: 2px;
+    font-family: 'rubik';
+}
+.input-task svg{
+    width: 1.7rem;
+    height: 1.7rem;
+    color: grey;
+    transition: all 0.4s;
+}
+.input-task svg:hover{
+    color: black;
+}
+
+
+.TASKS-container{
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+
+    overflow-x: auto;
+    overflow-y: scroll;
+
+    position: relative;
+    
+}
+.TASKS-container::-webkit-scrollbar{
+    width: 0.1rem;
+}
+.TASKS{
+    display: inline-block;
+    width: fit-content;
+    max-width: 95%;
+    margin: 0.2rem;
+    cursor: pointer;
+}
+.TASKS p{
+    font-family: 'rubik';
+    font-size: 0.9rem;
+    word-wrap: break-word;
+    text-align: start;
+    padding: .6rem;
+}
+
+.TASKS:hover{
+    scale: 1;
+}
+
+.tasks-menu{
+    background-color: white;
+    list-style: none;
+    padding: .4rem;
+    margin: 0;
+    z-index: 1;
+    display: flex;
+    transition: all .4s;
+    padding-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: .2rem;
+    width: 100%;
+}
+.tasks-menu button{
+    display: flex;
+}
+.tasks-menu svg{
+    width: 1.4rem;
+    height: 1.4rem;
+    color: lightgray;
+    transition: all 0.2s;
+}
+.tasks-menu svg:hover{
+    color: black;
+}
+
+
+.tasks-done .TASKS-container{
+    padding-left: 1.6rem;
+}
+.line{
+    border-top: .5px solid black;
+    position: absolute;
+    width: 100%;
+    top: 50%;
+}
+.tasks-svg{
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translate(-120%,-50%);
+    width: 1.4rem;
+    height: 1.4rem;
+}
+
+
+
+
+.prev-pending-tasks{
+    position: absolute;
+
+    width: 80%;
+    height: 50%;
+
+    top: 40%;
+
+    background-color: salmon;
+    z-index: 11;
+    padding: 1rem;
+
+    overflow-x: hidden;
+    overflow-y: scroll;
+
+    display: flex;
+    flex-direction: column;
+
+    transition: transform 0.2s;
+}
+.prev-pending-tasks div{
+    display: flex;
+    padding: .4rem;
+    gap: 1rem;
+    align-items: center;
+}
+.prev-pending-tasks div input{
+    width: 1rem;
+    height: 1rem;
+}
+
+.prev-pending-tasks::-webkit-scrollbar{
+    width: 0.1rem;
+}
+
+.alternate{
+    width: 80%;
+    align-self: center;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+.alternate span{
+    font-size: 1.2rem;
+    color: #9f9f9f;
+    font-weight: 600;
+}
+.alternate p{
+    color: #b5aeae;
+    text-align: center;
+}

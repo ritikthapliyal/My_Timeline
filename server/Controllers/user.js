@@ -1,5 +1,34 @@
 import User from '../Models/userModel.js'
 import bcrypt from 'bcryptjs'
+import cron from 'cron'
+
+
+// const job = new cron.CronJob('0 0 * * *', () => {
+const job = new cron.CronJob('49 21 * * *', () => {
+    User.find({ 'todaysTasks.status': false }, (err, users) => {
+        if (err) {
+          console.error(err);
+        } else {
+          users.forEach((user) => {
+            const pendingTasks = user.pendingTasks.concat(
+              user.todaysTasks.filter((task) => task.status === false)
+            );
+            user.todaysTasks = [];
+            user.pendingTasks = pendingTasks;
+            user.save((err) => {
+              if (err) {
+                console.error(err);
+              } else {
+                console.log(`Tasks moved successfully for user ${user.email}!`);
+              }
+            });
+          });
+        }
+    });
+});
+
+job.start();
+
 
 
 export const addUser = async (req,res) => {
@@ -36,8 +65,6 @@ export const verifyUser = async(req,res) => {
     const email = req.body.username
     const password = req.body.password
 
-    console.log(password)
-
     try{
         
         let user = await User.findOne({email:email})
@@ -61,7 +88,7 @@ export const setGoal = async (req,res)=>{
 
         const {_id,year,month,date,goal} = req.body
 
-        console.log(_id,year,month,date,goal)
+        // console.log(_id,year,month,date,goal)
         
         try{
     
@@ -73,6 +100,106 @@ export const setGoal = async (req,res)=>{
         catch(err){
             res.status(400).json({message:err})
         }
+
+}
+
+
+export const deleteGoal = async (req,res)=>{
+    
+    const {_id,date,month,year} = req.body
+
+    try{
+    
+        await User.updateOne({ _id },{ $unset: { [`goals.${month}.${year}.${date}`]: "" } });
+          
+        const updatedInfo = await User.findOne({_id},{password:0})
+        res.status(200).json({result:updatedInfo})
+    }
+    catch(err){
+        res.status(400).json({message:err})
+    }
+
+}
+
+export const editGoal = async (req,res)=>{
+
+    const {_id,date,month,year,goalTitle,goalMotivation} = req.body
+
+    // console.log(_id,date,month,year,goalTitle,goalMotivation)
+
+    try{
+        
+        await User.updateOne({ _id }, { 
+                                    $set: { 
+                                          [`goals.${month}.${year}.${date}.title`]: goalTitle, 
+                                          [`goals.${month}.${year}.${date}.motivation`]: goalMotivation,
+                                        } 
+                                }
+                        );
+          
+        const updatedInfo = await User.findOne({_id},{password:0})
+        res.status(200).json({result:updatedInfo})
+    }
+    catch(err){
+        res.status(400).json({message:err})
+    }
+
+}
+
+export const addTask = async (req,res)=>{
+    
+        const {_id,newTask} = req.body
+
+        try{
+
+            const user = await User.findById(_id);
+
+            if (!user) {
+                return res.status(404).json({ error: 'User not found' });
+            }
+
+            user.todaysTasks.push(newTask);
+            await user.save();
+
+            return res.status(201).json({result : newTask});
+        }
+        catch(error){
+            console.error(error);
+            return res.status(500).json({ error: 'Server error' });
+        }
+
+}
+export const doneTask = async (req,res)=>{
+    
+        const {_id,index} = req.body
+
+        // console.log(index)
+
+        try{
+            await User.updateOne({ _id },
+                { $set: { [`todaysTasks.${index}.status`]: true } });
+
+            res.status(200).json(index);
+        }
+        catch(error){
+            console.error(error);
+            return res.status(500).json({ error: 'Server error' });
+        }
+
+}
+
+
+export const resetData = async(req,res) => {
+
+    const _id = req.params.id
+
+    try{
+        let user = await User.findOne({_id})        
+        return res.status(200).json({result:user})
+    }
+    catch{
+        return res.status(500).json({message:"Something Went Wrong"})
+    }
 
 }
 

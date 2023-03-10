@@ -1,0 +1,46 @@
+.Achievements{
+    width: 70%;
+    background-color: white;
+}
+
+.year-dashboard{
+    display: flex;
+    width: 100%;
+    padding: 1rem;
+
+    justify-content: center;
+    align-items: center;
+
+    gap: .8rem;
+}
+.month{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .1rem;
+}
+.month p{
+    font-size: .8rem;
+}
+
+.day{
+    width: .6rem;
+    height: .6rem;
+    border-radius: 2px;
+    border: 1px solid rgb(173, 173, 173);
+}
+
+.week{
+    display: flex;
+    flex-direction: column;
+    gap: .2rem;
+}
+.weeks{
+    display: flex;
+    gap: .2rem;
+}
+
+.null{
+    border: none;
+    background-color: white;
+}

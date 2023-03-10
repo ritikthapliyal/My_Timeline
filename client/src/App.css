@@ -68,10 +68,13 @@ h1{
 }
 
 body{
-    background-image: url('./Assets/back.jpg');
-    backdrop-filter: brightness(0.5);
+    /* background-image: url('./Assets/back.jpg'); */
+    background-image: url('./Assets/back3.jpg');
 
-    background-size: contain;
+    /* backdrop-filter: brightness(0.4); */
+
+    background-color: #fafbff;
+    background-size: cover;
     background-attachment: fixed;
     background-position: center;
 }
@@ -105,11 +108,11 @@ body{
     bottom: 0;
 }
 .move-left:hover,.move-right:hover{
-    background-color: #434343c2;
+    background-color: #8f8e8e66;
 }
 .move-left svg,.move-right svg{
     width: 100%;
-    stroke: snow;
+    stroke: rgb(38, 38, 38);
 }
 .move-left{
     left: 0;

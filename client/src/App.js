@@ -1,19 +1,24 @@
 import './App.css'
 import Calendar from './Components/Calendar';
 import Deadline from './Components/Deadline';
-import Header from './Components/Header';
+import Header from './Components/Header/Header';
 import MyDiary from './Components/MyDiary/MyDiary';
 import { changePage } from './Redux/uiSlice';
-import {setFirstTimeLogin} from './Redux/userSlice';
-import Accomplishments from './Components/Accomplishments/Accomplishments';
+import {setFirstTimeLogin,resetData} from './Redux/userSlice';
+import RightScreen from './Components/RightScreen/RightScreen';
 import { useSelector,useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import schedule from 'node-schedule';
+
 
 function App() {
 
     const dispatch = useDispatch()
-    const {showMoveLeft, showMoveRight,translateXValue} = useSelector((state)=> state.uiSlice)
-    const {userLoggedIn,firstTimeLogin} = useSelector((state)=> state.userSlice)
-    
+
+    const {showMoveLeft, showMoveRight,translateXValue, mouseOverDeadline, showTodayInMiddeSreen} = useSelector((state)=> state.uiSlice)
+    const {userLoggedIn,userData,firstTimeLogin} = useSelector((state)=> state.userSlice)
+
+
     const handleMoveButtons = (direction) => {
 
         if(firstTimeLogin){
@@ -22,6 +27,18 @@ function App() {
 
         dispatch(changePage(direction))
     }
+
+    useEffect(() => {
+        const job = schedule.scheduleJob('51 21 * * *', () => {
+          if (userLoggedIn) {
+            dispatch(resetData(userData._id));
+          }
+        });
+    
+        return () => {
+          job.cancel();
+        };
+      }, [userLoggedIn, dispatch]);
 
 
     return (
@@ -39,7 +56,7 @@ function App() {
             <div className={userLoggedIn ? "timeline-grid" : ""}
                  style = {{ 
                             transform : userLoggedIn ? translateXValue : "",
-                            transition : firstTimeLogin ? "" : "all 0.4s"
+                            transition : firstTimeLogin ? "" : "all 0.4s", 
                         }}>
                 {
                     userLoggedIn && <MyDiary/>
@@ -54,7 +71,7 @@ function App() {
                     </div> */}
                 </div>
                 {
-                    userLoggedIn && <Accomplishments/>
+                    userLoggedIn && <RightScreen/>
                 }
             </div>
 
@@ -68,5 +85,11 @@ function App() {
         </div>
     );
 }
+
+
+
+
+
+
 
 export default App;

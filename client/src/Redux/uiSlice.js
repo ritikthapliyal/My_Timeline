@@ -110,6 +110,8 @@ export const uiSlice = createSlice({
 
         changePage(state,{payload}){
 
+            state.showTodayInMiddeSreen = false
+            state.mouseOverDeadline = false
 
             if(payload === "L"){
 
@@ -152,7 +154,7 @@ export const uiSlice = createSlice({
                 state.showMoveRight = true
             }
 
-        }
+        },
         
   },
 })

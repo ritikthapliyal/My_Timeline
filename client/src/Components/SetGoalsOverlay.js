@@ -1,7 +1,7 @@
 import ReactDOM from 'react-dom'
 import SetGoals from './SetGoals'
 
-function SetGoalsOverlay({setDisplayOverlay,position,clickedBtn}) {
+function SetGoalsOverlay({setDisplayOverlay,clickedBtn}) {
 
     const element = document.getElementById('portal')  
 
