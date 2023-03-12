@@ -17,7 +17,7 @@
     justify-content: center;
     align-items: center;
 
-    gap: .8rem;
+    gap: .6rem;
 }
 .month{
     display: flex;
@@ -30,20 +30,31 @@
 }
 
 .day{
-    width: .6rem;
-    height: .6rem;
+    width: .7rem;
+    height: .7rem;
     border-radius: 2px;
-    border: 1px solid rgb(173, 173, 173);
+    background-color: #E9EDC9;
 }
 
+.day-info{
+    width: 10rem;
+    position: absolute;
+    padding: .4rem 1rem;
+    transform: translate(-45%, -109%);
+    color: white;
+
+    font-size: 1.2rem;
+    display: flex;
+    flex-direction: column;
+}
 .week{
     display: flex;
     flex-direction: column;
-    gap: .2rem;
+    gap: .1rem;
 }
 .weeks{
     display: flex;
-    gap: .2rem;
+    gap: .1rem;
 }
 
 .null{

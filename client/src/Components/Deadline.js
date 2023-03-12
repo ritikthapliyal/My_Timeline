@@ -45,18 +45,10 @@ function Deadline() {
         dispatch(setMouseOverDeadline(true))
     }
     const handleMouseLeave = ()=>{
-        
         setEnableEditing(false)
         setEnableDelete(false)
         deadline.current.classList.remove("deadline-2")
         dispatch(setMouseOverDeadline(false))
-        
-    }
-    const handleShowToday = (e)=>{
-        // Checking if the click event originated from a button inside the div
-        // if (!e.target.closest('.goal-buttons') && !e.target.nodeName !== 'BUTTON' && !enableEditing) {
-        //     dispatch()
-        // }
     }
 
     const date = new Date()
@@ -109,7 +101,7 @@ function Deadline() {
                     <div className='goals-container'>
                         {
                             goals.length > 0 && goals.map((date,index)=>{
-                                return <div key={date} className='goal' onClick={handleShowToday}>
+                                return <div key={date} className='goal'>
                                     <div>
                                         <p className='goal-date'>
                                             <span className='goal-index'>{index+1}.</span>

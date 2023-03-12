@@ -5,8 +5,9 @@ const userSchema = new mongoose.Schema({
     password: String,
     mobile:String,
     address:String,
-    goals:Array,
     joinDate:String,
+    everyday:Array,
+    goals:Array,
     todaysTasks: Array,
     pendingTasks: Array
 })

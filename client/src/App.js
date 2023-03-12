@@ -29,7 +29,7 @@ function App() {
     }
 
     useEffect(() => {
-        const job = schedule.scheduleJob('51 21 * * *', () => {
+        const job = schedule.scheduleJob('51 14 * * *', () => {
           if (userLoggedIn) {
             dispatch(resetData(userData._id));
           }

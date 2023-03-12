@@ -4,24 +4,48 @@ import cron from 'cron'
 
 
 // const job = new cron.CronJob('0 0 * * *', () => {
-const job = new cron.CronJob('49 21 * * *', () => {
-    User.find({ 'todaysTasks.status': false }, (err, users) => {
+const job = new cron.CronJob('51 16 * * *', () => {
+
+    User.find({ 'todaysTasks.status': false }, async (err, users) => {
         if (err) {
           console.error(err);
         } else {
-          users.forEach((user) => {
-            const pendingTasks = user.pendingTasks.concat(
-              user.todaysTasks.filter((task) => task.status === false)
-            );
-            user.todaysTasks = [];
-            user.pendingTasks = pendingTasks;
-            user.save((err) => {
-              if (err) {
-                console.error(err);
-              } else {
-                console.log(`Tasks moved successfully for user ${user.email}!`);
-              }
-            });
+          await users.forEach((user) => {
+            
+            if(user.todaysTasks.length > 0){
+                
+                const pendingTasks = user.pendingTasks.concat(
+                    user.todaysTasks.filter((task) => task.status === false)
+                );
+                
+                const completedTasks = user.todaysTasks.filter((task) => task.status === true).length;
+                
+                let efficiency = (completedTasks / user.todaysTasks.length) * 100
+                efficiency = efficiency.toFixed(2)
+                
+                const now = new Date();
+                const currentDate = now.getDate();
+                const currentMonth = now.getMonth();
+
+                user.everyday[currentMonth][currentDate] = {
+                    efficiency,
+                    total_tasks : user.todaysTasks.length,
+                    completed_tasks : completedTasks
+                }
+
+                user.markModified('everyday');
+
+                user.todaysTasks = [];
+                user.pendingTasks = pendingTasks;
+
+                user.save((err) => {
+                    if (err) {
+                        console.error(err);
+                    } else {
+                        console.log(`Tasks moved successfully for user ${user.email}!`);
+                    }
+                });
+            }
           });
         }
     });
@@ -47,7 +71,14 @@ export const addUser = async (req,res) => {
 
         const hashPassword = await bcrypt.hash(password,12)
         
-        await User.create({email,mobile,address,password:hashPassword,goals:[{},{},{},{},{},{},{},{},{},{},{},{}],joinDate:date})        
+        await User.create({
+                            email,
+                            mobile,
+                            address,
+                            password:hashPassword,
+                            everyday:[{},{},{},{},{},{},{},{},{},{},{},{}],
+                            goals:[{},{},{},{},{},{},{},{},{},{},{},{}],
+                            joinDate:date})        
         
         const user = await User.findOne({email:email},{password:0})
         return res.status(201).json({result:user})   

@@ -1,12 +1,38 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './Achievements.css'
+import { useSelector } from 'react-redux'
 
 function Achievements() {
 
     const monthDivs = []
+    const {userData} = useSelector((state)=> state.userSlice)
+    const {today} = useSelector((state)=> state.uiSlice)
+    const [dateInfoData,setDateInfoData] = useState({})
+    const [showDateInfo,setShowDateInfo] = useState(false)
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    
+    const year = today.year
 
-    const year = 2023
+    const handleMouseOver = (obj)=>{
+        setDateInfoData({date:obj.j,month:obj.i})
+        setShowDateInfo(true)
+    }
+
+    const getColor = (eff) => {
+        if(eff < 30){
+            return "#F16767"
+        }
+        else if(eff <= 50){
+            return "#FFAE6D"
+        }
+        else if(eff <= 70){
+            return "#68B984"
+        }
+        else{
+            return "#3D8361"
+        }
+    }
+
 
     for (let i = 0; i <= 11; i++){
 
@@ -32,7 +58,29 @@ function Achievements() {
                     weekNumber-=1
                 }
                 else{
-                    week.push(<div key={j} className='day'></div>)
+                    if(userData.everyday[i][j]){
+                        
+                        const efficiency = Number(userData.everyday[i][j].efficiency)
+                        const backgroundColor = getColor(efficiency)
+                            week.push(
+                            <div key={j} 
+                                onMouseOver={(e)=>handleMouseOver({i,j},e)}
+                                onMouseLeave={()=>setShowDateInfo(false)}
+                                style={{backgroundColor, position: "relative"}} 
+                                className='day'>
+                                { showDateInfo && dateInfoData.date === j && dateInfoData.month === i && 
+                                    <div style={{backgroundColor}} className='day-info'>
+                                        <p>Efficiency : {efficiency}</p>
+                                        <p>Total Tasks : {userData.everyday[i][j].total_tasks}</p>
+                                        <p>Tasks Completed : {userData.everyday[i][j].completed_tasks}</p>
+                                    </div>
+                                }
+                            </div>)
+
+                    }
+                    else{
+                        week.push(<div key={j} className='day'></div>)
+                    }
                 }
             }
             else{
@@ -49,7 +97,6 @@ function Achievements() {
         }
 
         currMonth.push(<div className='week'>{week}</div>)
-
         monthDivs.push(<div className='month'><div className='weeks'>{currMonth}</div><p>{months[i]}</p></div>)
 
     }
