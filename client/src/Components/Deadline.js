@@ -24,7 +24,6 @@ function Deadline() {
     const [goalMotivation,setGoalMotivation] = useState("")
     const [enableDelete,setEnableDelete] = useState(false)
     const [enableEditing,setEnableEditing] = useState(false)
-    const [timeNegative,setTimeNegative] = useState(false)
 
     const {userData,userLoggedIn} = useSelector((state)=> state.userSlice)
     const {currMonth,currYear,mouseOverDeadline} = useSelector((state)=> state.uiSlice)
@@ -76,17 +75,14 @@ function Deadline() {
 
         const differenceInTime = futureDate.getTime() - today.getTime();
 
-        if (differenceInTime < 86400000) {
+        if (differenceInTime < 0) {return 'Time Ended';}
+        else if (differenceInTime < 86400000) {
             const seconds = Math.floor(differenceInTime / 1000);
             const minutes = Math.floor(seconds / 60);
             const hours = Math.floor(minutes / 60);
             const remainingMinutes = minutes % 60;
             const remainingSeconds = seconds % 60;
-            const timeString = `${hours.toString().padStart(2, '0')}:${remainingMinutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
-
-            if(timeNegative){ return "Time Expired"}
-            else if(timeNegative === '00:00:00'){setTimeNegative(true)}
-            else{ return timeString}
+            return `${hours.toString().padStart(2, '0')}:${remainingMinutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
         } 
         else {
             const days = Math.floor(differenceInTime / (1000 * 60 * 60 * 24));

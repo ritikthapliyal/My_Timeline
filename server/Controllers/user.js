@@ -11,11 +11,11 @@ const job = new cron.CronJob('0 0 * * *', async () => {
     const currentMonth = now.getMonth();
     const currentYear = now.getFullYear();
 
-    const prev = new Date();
-    prev.setDate(prev.getDate() - 1);
-    const previousDate = prev.getDate() 
-    const previousMonth = prev.getMonth()
-    const previousYear = prev.getFullYear()
+    const tomorrow = new Date(now);
+    tomorrow.setDate(now.getDate() + 1);
+    const tomorrowDate = now.getDate();
+    const tomorrowMonth = now.getMonth();
+    const tomorrowYear = now.getFullYear();
 
     const users = await User.find({});
     
@@ -45,9 +45,9 @@ const job = new cron.CronJob('0 0 * * *', async () => {
 
             }
 
-            if(user.goals[previousMonth][previousYear][previousDate] && !user.goals[previousMonth][previousYear][previousDate].status){
-                user.goals[previousMonth][previousYear][previousDate].time_expired = true
-                user.goals[previousMonth][previousYear][previousDate].status = false
+            if(user.goals[tomorrowMonth][tomorrowYear][tomorrowDate] && !user.goals[tomorrowMonth][tomorrowYear][tomorrowDate].status){
+                user.goals[tomorrowMonth][tomorrowYear][tomorrowDate].time_expired = true
+                user.goals[tomorrowMonth][tomorrowYear][tomorrowDate].status = false
                 user.markModified('goals');
             }
 

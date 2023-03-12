@@ -70,7 +70,7 @@ function Achievements() {
                                 className='day'>
                                 { showDateInfo && dateInfoData.date === j && dateInfoData.month === i && 
                                     <div style={{backgroundColor}} className='day-info'>
-                                        <p>Efficiency : {efficiency}</p>
+                                        <p>Efficiency : {efficiency}%</p>
                                         <p>Total Tasks : {userData.everyday[i][j].total_tasks}</p>
                                         <p>Tasks Completed : {userData.everyday[i][j].completed_tasks}</p>
                                     </div>

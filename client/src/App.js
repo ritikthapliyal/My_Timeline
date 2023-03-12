@@ -10,12 +10,13 @@ import { useSelector,useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import schedule from 'node-schedule';
 
+import cross from "./Assets/cross.png"
 
 function App() {
 
     const dispatch = useDispatch()
 
-    const {showMoveLeft, showMoveRight,translateXValue, mouseOverDeadline} = useSelector((state)=> state.uiSlice)
+    const {showMoveLeft,today, showMoveRight,translateXValue, mouseOverDeadline} = useSelector((state)=> state.uiSlice)
     const {userLoggedIn,userData,firstTimeLogin} = useSelector((state)=> state.userSlice)
 
 
@@ -29,7 +30,7 @@ function App() {
     }
 
     useEffect(() => {
-        const job = schedule.scheduleJob("5 0 * * *", () => {
+        const job = schedule.scheduleJob("7 0 * * *", () => {
           if (userLoggedIn) {
             dispatch(resetData(userData._id))
             dispatch(updateDate())
@@ -66,11 +67,63 @@ function App() {
                 <div className='timeline'>
                     <Calendar/>
                     <Deadline/>
-                    <div className={`Calendar-details ${mouseOverDeadline ? "Calendar-details-2" : ""}`}>
-                        <p>Date</p>
-                        <p>Date</p>
-                        <p>Date</p>
-                    </div>
+                    {
+                      userLoggedIn && <div className={`Calendar-details ${mouseOverDeadline ? "Calendar-details-2" : ""}`}>
+                            
+                            <div>
+                                <span style={{
+                                    display:"flex",
+                                    alignItems:"center",
+                                    justifyContent:"center",
+                                    width: "2.8rem",
+                                    height: "2.8rem",
+                                    animation : "example",
+                                    animationDuration: "5s",
+                                    animationIterationCount: "infinite",
+                                    pointerEvents:"none"
+                                }}>{today.today}</span>
+                                <p>Your <span style={{color:"rgb(40 185 79)",fontWeight:"600"}}>Goal</span> is set.</p>
+                            </div>
+                            
+                            <div>
+                                <span style={{
+                                        display:"flex",
+                                        alignItems:"center",
+                                        justifyContent:"center",
+                                        width: "2.8rem",
+                                        height: "2.8rem",
+                                        color: "white",
+                                        backgroundColor : "#F06292",
+                                    }}>{today.today}</span>
+                                <p>It's <span style={{color:"#F06292", fontWeight:"600"}}>Sunday</span>. <br/>Take a break... or <span style={{color:"#635985",fontWeight:"600"}}>NOT.</span></p>
+                            </div>
+
+                            <div>
+                                <span className='trophy-span' style={{
+                                       display:"flex",
+                                       alignItems:"center",
+                                       justifyContent:"center",
+                                       width: "2.8rem",
+                                       height: "2.8rem",
+                                       borderRadius: "20%",                                     
+                                }}>
+                                </span>
+                                <p><span style={{color:"#2146C7", fontWeight:"600"}}>Congratulations !!</span>. <br/>You have Achieved Your Goal.</p>
+                            </div>
+                            <div>
+                                <span className='cross-span' style={{
+                                       display:"flex",
+                                       alignItems:"center",
+                                       justifyContent:"center",
+                                       width: "2.8rem",
+                                       height: "2.8rem",
+                                       borderRadius: "20%",                                       
+                                }}>
+                                </span>
+                                <p>You Missed a <span style={{color:"#E0144C", fontWeight:"600"}}>Deadline</span>.<br/></p>
+                            </div>
+                        </div>
+                    }
                 </div>
                 {
                     userLoggedIn && <RightScreen/>

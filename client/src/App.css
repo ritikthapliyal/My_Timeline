@@ -68,11 +68,7 @@ h1{
 }
 
 body{
-    /* background-image: url('./Assets/back.jpg'); */
     background-image: url('./Assets/back3.jpg');
-
-    /* backdrop-filter: brightness(0.4); */
-
     background-color: #fafbff;
     background-size: cover;
     background-attachment: fixed;
@@ -80,24 +76,33 @@ body{
 }
 
 
-
 .Calendar-details{
     position: absolute;
     background-color: white;
     border: 1px solid black;
     
-    width: 7.55%;
-    bottom: -14%;
-    padding: 1rem;
+    width: 7.8%;
+
+    left: 37%;
+    bottom: -45%;
+    padding: 1.2rem;
     border-radius: 2px;
 
-    transform: translateX(-111%);
+    display: flex;
+    gap: 1.2rem;
+    scale: 0.9;
+    flex-direction: column;
 
     transition: all 0.4s;
 }
 .Calendar-details-2{
-    bottom: 0;
-    transform: translate(-118%,-200%);
+    transform: translateY(-130%);
+}
+
+.Calendar-details div{
+    display: flex;
+    align-items: center;
+    gap: 1rem;
 }
 
 .move-left,.move-right{
@@ -121,4 +126,18 @@ body{
 }
 .move-right{
     right: 0;
+}
+
+
+.trophy-span{
+    background-image: url('./Assets/trophy.png');
+    background-size: 2rem;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+.cross-span{
+    background-image: url('./Assets/cross.png');
+    background-size: 2rem;
+    background-repeat: no-repeat;
+    background-position: center;
 }
