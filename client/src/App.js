@@ -3,7 +3,7 @@ import Calendar from './Components/Calendar';
 import Deadline from './Components/Deadline';
 import Header from './Components/Header/Header';
 import MyDiary from './Components/MyDiary/MyDiary';
-import { changePage } from './Redux/uiSlice';
+import { changePage, updateDate} from './Redux/uiSlice';
 import {setFirstTimeLogin,resetData} from './Redux/userSlice';
 import RightScreen from './Components/RightScreen/RightScreen';
 import { useSelector,useDispatch } from 'react-redux';
@@ -15,7 +15,7 @@ function App() {
 
     const dispatch = useDispatch()
 
-    const {showMoveLeft, showMoveRight,translateXValue, mouseOverDeadline, showTodayInMiddeSreen} = useSelector((state)=> state.uiSlice)
+    const {showMoveLeft, showMoveRight,translateXValue, mouseOverDeadline} = useSelector((state)=> state.uiSlice)
     const {userLoggedIn,userData,firstTimeLogin} = useSelector((state)=> state.userSlice)
 
 
@@ -29,15 +29,17 @@ function App() {
     }
 
     useEffect(() => {
-        const job = schedule.scheduleJob('51 14 * * *', () => {
+        const job = schedule.scheduleJob("5 0 * * *", () => {
           if (userLoggedIn) {
-            dispatch(resetData(userData._id));
+            dispatch(resetData(userData._id))
+            dispatch(updateDate())
           }
-        });
+        })
     
         return () => {
           job.cancel();
-        };
+        }
+
       }, [userLoggedIn, dispatch]);
 
 
@@ -64,11 +66,11 @@ function App() {
                 <div className='timeline'>
                     <Calendar/>
                     <Deadline/>
-                    {/* <div className={`Calendar-details ${mouseOverDeadline ? "Calendar-details-2" : ""}`}>
+                    <div className={`Calendar-details ${mouseOverDeadline ? "Calendar-details-2" : ""}`}>
                         <p>Date</p>
                         <p>Date</p>
                         <p>Date</p>
-                    </div> */}
+                    </div>
                 </div>
                 {
                     userLoggedIn && <RightScreen/>

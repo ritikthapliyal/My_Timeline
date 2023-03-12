@@ -4,14 +4,23 @@ import cron from 'cron'
 
 
 // const job = new cron.CronJob('0 0 * * *', () => {
-const job = new cron.CronJob('51 16 * * *', () => {
+const job = new cron.CronJob('0 0 * * *', async () => {
 
-    User.find({ 'todaysTasks.status': false }, async (err, users) => {
-        if (err) {
-          console.error(err);
-        } else {
-          await users.forEach((user) => {
-            
+    const now = new Date();
+    const currentDate = now.getDate();
+    const currentMonth = now.getMonth();
+    const currentYear = now.getFullYear();
+
+    const prev = new Date();
+    prev.setDate(prev.getDate() - 1);
+    const previousDate = prev.getDate() 
+    const previousMonth = prev.getMonth()
+    const previousYear = prev.getFullYear()
+
+    const users = await User.find({});
+    
+    users.forEach((user) => {
+
             if(user.todaysTasks.length > 0){
                 
                 const pendingTasks = user.pendingTasks.concat(
@@ -22,10 +31,6 @@ const job = new cron.CronJob('51 16 * * *', () => {
                 
                 let efficiency = (completedTasks / user.todaysTasks.length) * 100
                 efficiency = efficiency.toFixed(2)
-                
-                const now = new Date();
-                const currentDate = now.getDate();
-                const currentMonth = now.getMonth();
 
                 user.everyday[currentMonth][currentDate] = {
                     efficiency,
@@ -38,18 +43,24 @@ const job = new cron.CronJob('51 16 * * *', () => {
                 user.todaysTasks = [];
                 user.pendingTasks = pendingTasks;
 
-                user.save((err) => {
-                    if (err) {
-                        console.error(err);
-                    } else {
-                        console.log(`Tasks moved successfully for user ${user.email}!`);
-                    }
-                });
             }
-          });
-        }
-    });
-});
+
+            if(user.goals[previousMonth][previousYear][previousDate] && !user.goals[previousMonth][previousYear][previousDate].status){
+                user.goals[previousMonth][previousYear][previousDate].time_expired = true
+                user.goals[previousMonth][previousYear][previousDate].status = false
+                user.markModified('goals');
+            }
+
+            user.save((err) => {
+                if (err) {
+                    console.error(err);
+                } else {
+                    console.log(`Tasks moved successfully for user ${user.email}!`);
+                }
+            });
+
+        })
+    })
 
 job.start();
 
@@ -142,6 +153,25 @@ export const deleteGoal = async (req,res)=>{
     try{
     
         await User.updateOne({ _id },{ $unset: { [`goals.${month}.${year}.${date}`]: "" } });
+          
+        const updatedInfo = await User.findOne({_id},{password:0})
+        res.status(200).json({result:updatedInfo})
+    }
+    catch(err){
+        res.status(400).json({message:err})
+    }
+
+}
+
+export const doneGoal = async (req,res)=>{
+    
+    const {_id,date,month,year} = req.body.data
+
+    console.log(_id,date,month,year)
+
+    try{
+    
+        await User.updateOne({ _id },{ $set: { [`goals.${month}.${year}.${date}.status`]: true } });
           
         const updatedInfo = await User.findOne({_id},{password:0})
         res.status(200).json({result:updatedInfo})

@@ -84,18 +84,20 @@ body{
 .Calendar-details{
     position: absolute;
     background-color: white;
+    border: 1px solid black;
     
-    left: 8%;
-    width: 22%;
+    width: 7.55%;
     bottom: -14%;
     padding: 1rem;
     border-radius: 2px;
 
-    transition: all 0.3s;
+    transform: translateX(-111%);
+
+    transition: all 0.4s;
 }
 .Calendar-details-2{
     bottom: 0;
-    transform: translate(0%,-150%);
+    transform: translate(-118%,-200%);
 }
 
 .move-left,.move-right{

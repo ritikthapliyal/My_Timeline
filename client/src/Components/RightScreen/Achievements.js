@@ -103,11 +103,15 @@ function Achievements() {
 
     return (
         <div className='Achievements'>
-            <h3>Achievements</h3>
+            <h3>Year Dashboard</h3>
             <div className='year-dashboard'>
                 {
                     monthDivs
                 }
+            </div>
+            <div>
+                <div className='week-info'></div>
+                <div className='past-achievements'></div>
             </div>
         </div>
     )

@@ -3,6 +3,8 @@ import './Calendar.css'
 import SetGoalsOverlay from './SetGoalsOverlay';
 import { useSelector, useDispatch } from 'react-redux';
 import { incrementYearAndMonth, decrementYearAndMonth,setCurrentSelectedDate } from '../Redux/uiSlice';
+import trophy from '../Assets/trophy.png'
+import cross from '../Assets/cross.png'
 
 
 
@@ -13,7 +15,7 @@ function Calendar() {
     const {dates,today,currMonth,currYear,mouseOverDeadline, showMyDiary} = useSelector((state)=> state.uiSlice)
     const {userData,userLoggedIn} = useSelector((state)=> state.userSlice)
     const [clickedBtn, setClickedBtn] = useState({});
-
+    const [showGoalInfo,setShowGoalInfo] = useState(0)
 
     const joinDate = new Date(userData.joinDate)
     const joinYear = joinDate.getFullYear()
@@ -129,15 +131,104 @@ function Calendar() {
                         }
                         else{
                             if( userLoggedIn && checkIfGoalSet(date)){
-                                return <button className='Calendar-button' key={index} value={date} 
-                                               style={{ 
-                                                        cursor: "unset",
-                                                        borderColor : '#F9F54B',
-                                                        borderRadius : "50%",
-                                                        animation : "example",
-                                                        animationDuration: "5s",
-                                                        animationIterationCount: "infinite",
-                                                    }}>{date}</button>
+
+                                if(userData.goals[currMonth][currYear][date].time_expired){
+                                    return <button className='Calendar-buttons' 
+                                                   key={index} 
+                                                   value={date} 
+                                                   onMouseOver={()=>{setShowGoalInfo(date)}}
+                                                   onMouseLeave={()=>{setShowGoalInfo(0)}}
+                                                   style={{ 
+                                                            zIndex: "11",
+                                                            width: "2.8rem",
+                                                            height: "2.8rem",
+                                                            color: "white",
+                                                            border: "none",
+                                                            cursor: "unset",
+                                                            position: "relative",
+                                                            fontSize:"0.8rem",
+                                                            fontWeight:"600",
+                                                            borderRadius: "20%",
+                                                            transition: "all 0.2s",
+                                                        }}>{date}
+                                                        <img src={cross} 
+                                                             style={{
+                                                                        width:"2rem",
+                                                                        height:"2rem",
+                                                                        position:"absolute",
+                                                                        top:"50%",
+                                                                        left:"50%",
+                                                                        transform : "translate(-50%,-50%)",
+                                                                        zIndex:"-1"
+                                                                    }}>
+                                                        </img>
+
+                                                        {
+                                                            showGoalInfo === date && <div className='goal-info'>
+                                                                <p>
+                                                                    <span style={{color :  '#EB455F'}}>Failed </span>
+                                                                    To Achieve Goal
+                                                                    <span style={{
+                                                                        wordBreak:"break-word",
+                                                                        color :  'rgb(51 219 165)',
+                                                                        fontSize: "1rem",
+                                                                        }}> {userData.goals[currMonth][currYear][date].title}</span>
+                                                                </p>
+                                                            </div>
+                                                        }
+                                            </button>
+                                }
+                                else if(userData.goals[currMonth][currYear][date].status){
+                                    return <button className='Calendar-buttons' 
+                                                   key={index} 
+                                                   value={date} 
+                                                   onMouseOver={()=>{setShowGoalInfo(date)}}
+                                                   onMouseLeave={()=>{setShowGoalInfo(0)}}
+                                                   style={{ 
+                                                            zIndex: "11",
+                                                            width: "2.8rem",
+                                                            height: "2.8rem",
+                                                            color: "white",
+                                                            border: "none",
+                                                            cursor: "unset",
+                                                            position: "relative",
+                                                            fontSize:"1.1rem",
+                                                            fontWeight:"600",
+                                                            borderRadius: "20%",
+                                                            backgroundColor : "#03C988",
+                                                            transition: "all 0.2s",
+                                                        }}>{date}
+                                                        <img src={trophy} 
+                                                             style={{width:"2rem",height:"2rem",position:"absolute"}}>
+                                                        </img>
+
+                                                        {
+                                                            showGoalInfo === date && <div className='goal-info'>
+                                                                <p>
+                                                                    <span style={{color :  '#F9F54B'}}>Congratulation !! </span>
+                                                                    You have completed the Goal 
+                                                                    <span style={{
+                                                                        fontSize: "1rem",
+                                                                        wordBreak:"break-word",
+                                                                        color :  'rgb(51 219 165)',
+                                                                        }}> {userData.goals[currMonth][currYear][date].title}</span>
+                                                                </p>
+                                                            </div>
+                                                        }
+                                            </button>
+                                }
+                                else{
+                                    return <button className='Calendar-button' key={index} value={date} 
+                                                   style={{ 
+                                                            cursor: "unset",
+                                                            borderColor : '#F9F54B',
+                                                            borderRadius : "50%",
+                                                            animation : "example",
+                                                            animationDuration: "5s",
+                                                            animationIterationCount: "infinite",
+                                                            pointerEvents:"none"
+                                                        }}>{date}</button>
+                                }
                             }
                             else if(date === today.today && currMonth === today.month && currYear === today.year){
                                 return <button className='Calendar-button' key={index} value={date} 
@@ -147,15 +238,16 @@ function Calendar() {
                                                         fontSize: '1.4rem',
                                                         fontFamily: 'fantasy',
                                                         cursor: "unset",
+                                                        pointerEvents:"none"
                                                     }}>{date}</button>
                             }
                             else if(userLoggedIn && currYear <= today.year && currMonth < today.month){
                                 return <button className='Calendar-button' key={index} value={date} 
-                                style={{color : index % 7 === 0 ? "#f091b1" : "#838282",border:"none", cursor: "unset",}}>{date}</button>
+                                style={{color : index % 7 === 0 ? "#f091b1" : "#838282",border:"none",pointerEvents:"none", cursor: "unset",}}>{date}</button>
                             }
                             else if(userLoggedIn && currYear === today.year && currMonth === today.month && date < today.today){
                                 return <button className='Calendar-button' key={index} value={date} 
-                                        style={{color : index % 7 === 0 ? "#f091b1" : "#838282",border:"none", cursor: "unset",}}>{date}</button>
+                                        style={{color : index % 7 === 0 ? "#f091b1" : "#838282",border:"none", cursor: "unset",pointerEvents:"none"}}>{date}</button>
                             }
                             else{
                                 return <button className='Calendar-button' key={index} value={date} onClick={handleOnClick} 

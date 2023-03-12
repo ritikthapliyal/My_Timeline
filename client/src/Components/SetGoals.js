@@ -35,7 +35,7 @@ function SetGoals({setDisplayOverlay,clickedBtn}) {
     
     const [motivation,setMotivation] = useState("") 
     const [title,setTitle] = useState("") 
-    const [selectedOption, setSelectedOption] = useState("");
+    const [selectedOption, setSelectedOption] = useState("C");
       
     const handleOptionChange = (event) => {
         setSelectedOption(event.target.value);
@@ -48,7 +48,7 @@ function SetGoals({setDisplayOverlay,clickedBtn}) {
                             month : currMonth, 
                             year : currYear, 
                             date : currSelectedDate, 
-                            goal : { title, motivation, type : selectedOption}
+                            goal : { title, motivation, type : selectedOption, status:false, time_expired: false}
                         })).then(setDisplayOverlay())
     }
 

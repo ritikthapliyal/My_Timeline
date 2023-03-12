@@ -7,6 +7,7 @@ export function verifyUser(userData){return axios.post(user + 'verify',userData)
 export function setGoal(data){return axios.put(user,data)}
 export function deleteGoal(data){return axios.delete(user,data)}
 export function editGoal(data){return axios.patch(user,data)}
+export function doneGoal(data){return axios.patch(user + 'done',data)}
 
 
 export function resetData(data){return axios.get(`${user}${data}`)}

@@ -56,8 +56,21 @@
     color: lightgray;
     cursor: unset;
     border-radius: 50%;
+    pointer-events: none;
 }
 
+.goal-info{
+    position: absolute;
+    top: 0;
+    left: 50%;
+    background-color: #2B3467;
+    padding: .4rem .8rem;
+    transform: translate(-50%,-110%);
+
+    width: 12rem;
+    font-size: 0.8rem;
+    border-radius: 12px;
+}
 
 
 .prev-month,.next-month{
@@ -114,7 +127,7 @@
 }
 
 
-/* timeline (-46%) */
+
 
 
 @keyframes example {
@@ -122,27 +135,25 @@
       color: black;
       background-color: #f9f54b;
       border-radius: 0%;
-      /* transform: rotate(370deg); */
+      background-image: none;
     }
-    10%{
-        color: #fbf881;
+    20%{
+        color: transparent;
     }
     50% {
       background-color: #fbf881;
-      color: #fbf881;
-      /* border-radius: 50%; */
+      color: transparent;
       border-radius: 0%;
       background-image: url('../Assets/timer.png');
       background-position: center;
       background-size: cover;
-      /* transform: rotate(0deg); */
     }
     60%{
-        color: #fbf881;
+        color: transparent;
     }
     100% {
         background-color: #f9f54b;
         border-radius: 0%;
-        /* transform: rotate(370deg); */
+        background-image: none;
     }
 }

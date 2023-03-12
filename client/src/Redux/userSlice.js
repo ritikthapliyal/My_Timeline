@@ -23,6 +23,10 @@ export const setGoal = createAsyncThunk('user/setGoal',async (data) => {
     const response = await api.setGoal(data)
     return response.data
 })
+export const doneGoal = createAsyncThunk('user/doneGoal', async(data) =>{
+    const response = await api.doneGoal({data:data})
+    return response.data
+})
 export const deleteGoal = createAsyncThunk('user/deleteGoal', async(data) =>{
     const response = await api.deleteGoal({data:data})
     return response.data
@@ -59,6 +63,7 @@ const initialState = {
     
     setGoalStatus : "",
     deleteGoalStatus : "",
+    doneGoalStatus : "",
     editGoalStatus : "",
 
     addTaskStatus : "",
@@ -121,6 +126,13 @@ const userSlice = createSlice({
         [deleteGoal.pending]:(state)=>{ return {...state,deleteGoalStatus:"pending"}},
         [deleteGoal.rejected] : (state) => { return {...state,deleteGoalStatus:"rejected"}},
         [deleteGoal.fulfilled] : (state,{payload}) => {return {...state,deleteGoalStatus:"success",userData:payload.result}},
+        
+        //////////////////////////////////////////////////////////////////////////////
+        
+        
+        [doneGoal.pending]:(state)=>{ return {...state,doneGoalStatus:"pending"}},
+        [doneGoal.rejected] : (state) => { return {...state,doneGoalStatus:"rejected"}},
+        [doneGoal.fulfilled] : (state,{payload}) => {return {...state,doneGoalStatus:"success",userData:payload.result}},
         
         //////////////////////////////////////////////////////////////////////////////
         

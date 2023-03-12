@@ -1,15 +1,15 @@
 import React, { useRef,useEffect,useState, Fragment} from 'react'
 import './Deadline.css'
 import {setMouseOverDeadline} from '../Redux/uiSlice'
-import {deleteGoal, editGoal} from '../Redux/userSlice'
+import {deleteGoal, editGoal, doneGoal} from '../Redux/userSlice'
 import { useDispatch,useSelector } from 'react-redux'
 import timer from '../Assets/timer.png'
 
 
-
 function getGoalsArray(userData,userLoggedIn,currMonth,currYear){
     if(userLoggedIn && Object.keys(userData.goals[currMonth]).length !== 0 && userData.goals[currMonth][currYear]){
-        return Object.keys(userData.goals[currMonth][currYear])
+        const dates = Object.keys(userData.goals[currMonth][currYear])
+        return dates.filter((date)=>!userData.goals[currMonth][currYear][date].status)
     }
     else {
         return []
@@ -24,7 +24,7 @@ function Deadline() {
     const [goalMotivation,setGoalMotivation] = useState("")
     const [enableDelete,setEnableDelete] = useState(false)
     const [enableEditing,setEnableEditing] = useState(false)
-    
+    const [timeNegative,setTimeNegative] = useState(false)
 
     const {userData,userLoggedIn} = useSelector((state)=> state.userSlice)
     const {currMonth,currYear,mouseOverDeadline} = useSelector((state)=> state.uiSlice)
@@ -38,6 +38,9 @@ function Deadline() {
     }
     const handleUpdateGoal = (date)=>{
         dispatch(editGoal({_id:userData._id,date,month:currMonth,year:currYear,goalTitle,goalMotivation})).then(setConfirmation(0),setEnableEditing(false))
+    }
+    const handleDoneGoal = (date)=>{
+        dispatch(doneGoal({_id:userData._id,date,month:currMonth,year:currYear}))
     }
 
     const handleMouseOver = ()=>{
@@ -79,7 +82,11 @@ function Deadline() {
             const hours = Math.floor(minutes / 60);
             const remainingMinutes = minutes % 60;
             const remainingSeconds = seconds % 60;
-            return `${hours.toString().padStart(2, '0')}:${remainingMinutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+            const timeString = `${hours.toString().padStart(2, '0')}:${remainingMinutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+
+            if(timeNegative){ return "Time Expired"}
+            else if(timeNegative === '00:00:00'){setTimeNegative(true)}
+            else{ return timeString}
         } 
         else {
             const days = Math.floor(differenceInTime / (1000 * 60 * 60 * 24));
@@ -137,10 +144,8 @@ function Deadline() {
                                             <button onClick={()=>{  setEnableEditing(true);
                                                                     setConfirmation(date)
                                                                     setEnableDelete(false)
-                                                                    // if(!enableEditing){
-                                                                        setGoalTitle(userData.goals[currMonth][currYear][date].title)
-                                                                        setGoalMotivation(userData.goals[currMonth][currYear][date].motivation)
-                                                                    // }
+                                                                    setGoalTitle(userData.goals[currMonth][currYear][date].title)
+                                                                    setGoalMotivation(userData.goals[currMonth][currYear][date].motivation)
                                                                 }} 
                                             style={{ display : mouseOverDeadline ? "flex" : "none"}}>
                                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M441 58.9L453.1 71c9.4 9.4 9.4 24.6 0 33.9L424 134.1 377.9 88 407 58.9c9.4-9.4 24.6-9.4 33.9 0zM209.8 256.2L344 121.9 390.1 168 255.8 302.2c-2.9 2.9-6.5 5-10.4 6.1l-58.5 16.7 16.7-58.5c1.1-3.9 3.2-7.5 6.1-10.4zM373.1 25L175.8 222.2c-8.7 8.7-15 19.4-18.3 31.1l-28.6 100c-2.4 8.4-.1 17.4 6.1 23.6s15.2 8.5 23.6 6.1l100-28.6c11.8-3.4 22.5-9.7 31.1-18.3L487 138.9c28.1-28.1 28.1-73.7 0-101.8L474.9 25C446.8-3.1 401.2-3.1 373.1 25zM88 64C39.4 64 0 103.4 0 152V424c0 48.6 39.4 88 88 88H360c48.6 0 88-39.4 88-88V312c0-13.3-10.7-24-24-24s-24 10.7-24 24V424c0 22.1-17.9 40-40 40H88c-22.1 0-40-17.9-40-40V152c0-22.1 17.9-40 40-40H200c13.3 0 24-10.7 24-24s-10.7-24-24-24H88z"/></svg>
@@ -173,7 +178,7 @@ function Deadline() {
                                                     </div>
                                             }
 
-                                            <button style={{ display : mouseOverDeadline ? "flex" : "none"}}>
+                                            <button onClick={()=>handleDoneGoal(date)} style={{ display : mouseOverDeadline ? "flex" : "none"}}>
                                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M211.8 339.8C200.9 350.7 183.1 350.7 172.2 339.8L108.2 275.8C97.27 264.9 97.27 247.1 108.2 236.2C119.1 225.3 136.9 225.3 147.8 236.2L192 280.4L300.2 172.2C311.1 161.3 328.9 161.3 339.8 172.2C350.7 183.1 350.7 200.9 339.8 211.8L211.8 339.8zM0 96C0 60.65 28.65 32 64 32H384C419.3 32 448 60.65 448 96V416C448 451.3 419.3 480 384 480H64C28.65 480 0 451.3 0 416V96zM48 96V416C48 424.8 55.16 432 64 432H384C392.8 432 400 424.8 400 416V96C400 87.16 392.8 80 384 80H64C55.16 80 48 87.16 48 96z"/></svg>
                                             </button>
                                         </div>

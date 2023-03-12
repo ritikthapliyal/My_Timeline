@@ -100,7 +100,7 @@ function Today() {
     return (
         <div className='Today'>
 
-            <button className='flip-page' onClick={()=>{setShowDoneTasks(!showDoneTasks);setShowPendingTasks(false)}}>
+            <button className='flip-page' onClick={()=>{setShowDoneTasks(!showDoneTasks)}}>
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5" />
                 </svg>
@@ -111,16 +111,24 @@ function Today() {
                  onMouseLeave={toggleTranslateY} 
                  className='prev-pending-tasks'
                  style={{transform:"translateY(130%)"}}>
-                    {
-                        userData.pendingTasks.map(({task},index)=>{
-                            return <div>
-                                <input  type="checkbox" 
-                                        checked={movePending.includes(index)} 
-                                        onChange={()=>handleCheckbox(index)}></input>
-                                <label>{task}</label>
-                            </div>
-                        })
-                    }
+                    <p>Previous Pending Tasks</p>
+
+                    <div className='prev-pending-tasks-inputs'>
+                        {
+                            userData.pendingTasks.map(({task},index)=>{
+                                return <div className='prev-pending-tasks-input'>
+                                    <input  type="checkbox" 
+                                            checked={movePending.includes(index)} 
+                                            onChange={()=>handleCheckbox(index)}></input>
+                                    <label>{task}</label>
+                                </div>
+                            })
+                        }
+                    </div>
+                    <div className='prev-pending-tasks-buttons'>
+                        <button>Add Selected</button>
+                        <button>Add All</button>
+                    </div>
             </div>
         
 

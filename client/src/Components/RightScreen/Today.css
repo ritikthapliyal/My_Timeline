@@ -220,19 +220,37 @@
 
     top: 40%;
 
-    background-color: salmon;
+    background-color: #4D455D;
     z-index: 11;
-    padding: 1rem;
+
+    box-shadow: 0px 0px 6px rgba(162, 162, 162, 0.907);
 
     overflow-x: hidden;
     overflow-y: scroll;
+    padding: .6rem;
+    border-radius: 12px;
 
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
 
     transition: transform 0.2s;
 }
-.prev-pending-tasks div{
+.prev-pending-tasks p{
+    text-align: center;
+    color: white;
+}
+.prev-pending-tasks-inputs{
+    width: 100%;
+    height: 75%;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+.prev-pending-tasks-inputs::-webkit-scrollbar{
+    width: 0.1rem;
+}
+
+.prev-pending-tasks-input{
     display: flex;
     padding: .4rem;
     gap: 1rem;
@@ -262,4 +280,18 @@
 .alternate p{
     color: #b5aeae;
     text-align: center;
+}
+
+
+.prev-pending-tasks-buttons{
+    display: flex;
+    width: 100%;
+    height: fit-content;
+    justify-content: space-evenly;
+}
+.prev-pending-tasks-buttons button{
+    background-color: lightcoral;
+    color: white;
+    padding: .6rem .8rem;
+    border-radius: 12px;
 }

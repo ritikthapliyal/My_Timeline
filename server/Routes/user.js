@@ -1,5 +1,5 @@
 import express from 'express'
-import {addUser,verifyUser,setGoal, deleteGoal, editGoal, addTask, doneTask, resetData} from '../controllers/user.js'
+import {addUser,verifyUser,setGoal, deleteGoal, editGoal, addTask, doneTask, resetData, doneGoal} from '../controllers/user.js'
 
 const user = express.Router();
 
@@ -9,6 +9,7 @@ user.put('/',setGoal)
 user.post('/',addUser)
 user.patch('/',editGoal)
 user.delete('/',deleteGoal)
+user.patch('/done',doneGoal)
 user.post('/verify',verifyUser)
 
 

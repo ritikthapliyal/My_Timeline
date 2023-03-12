@@ -75,6 +75,19 @@ export const uiSlice = createSlice({
             state.currYear = state.today.year 
         },
 
+        updateDate(state){
+            const date = new Date()
+            const today = date.getDate()
+            const month = date.getMonth()
+            const year = date.getFullYear()
+
+            state.today = {
+                today,
+                month,
+                year
+            }
+        },
+
         incrementYearAndMonth(state){
 
             state.currSelectedDate = 0
@@ -160,6 +173,6 @@ export const uiSlice = createSlice({
 })
 
 
-export const { incrementYearAndMonth,changePage, changeDatesArray, decrementYearAndMonth,setCurrentSelectedDate,setMouseOverDeadline } = uiSlice.actions
+export const { incrementYearAndMonth,changePage, changeDatesArray, decrementYearAndMonth,setCurrentSelectedDate,setMouseOverDeadline, updateDate } = uiSlice.actions
 
 export default uiSlice.reducer

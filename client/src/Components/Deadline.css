@@ -2,7 +2,7 @@
     width: 45%;
     height: 80%;
     background-color: white;
-    transition: all 0.5s;
+    transition: all 0.4s;
     transition-delay: all 0.1s;
     align-self: flex-end;
 
@@ -36,9 +36,9 @@
 }
 
 .deadline-2{
-    transform: translateX(-10%);
-    height: 90%;
     width: 75%;
+    height: 90%;
+    transform: translateX(-12%);
 }
 
 .deadline-heading{
@@ -75,7 +75,7 @@
     text-align: center;
 
     padding: 1rem;
-    width: 90%;
+    width: 50%;
     margin: 2rem 0rem;
 }
 
@@ -90,10 +90,8 @@
 
     gap: 0.6rem;
 
-    
     border-radius: 4px;
 
-    /* border: 1px solid black; */
     transition: all 0.4s;
 
     cursor: pointer;
