@@ -10,7 +10,6 @@ import { useSelector,useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import schedule from 'node-schedule';
 
-import cross from "./Assets/cross.png"
 
 function App() {
 
@@ -30,7 +29,7 @@ function App() {
     }
 
     useEffect(() => {
-        const job = schedule.scheduleJob("7 0 * * *", () => {
+        const job = schedule.scheduleJob("0 0 * * *", () => {
           if (userLoggedIn) {
             dispatch(resetData(userData._id))
             dispatch(updateDate())

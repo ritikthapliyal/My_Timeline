@@ -4,12 +4,11 @@ import cron from 'cron'
 
 
 // const job = new cron.CronJob('0 0 * * *', () => {
-const job = new cron.CronJob('0 0 * * *', async () => {
+const job = new cron.CronJob('59 23 * * *', async () => {
 
     const now = new Date();
     const currentDate = now.getDate();
     const currentMonth = now.getMonth();
-    const currentYear = now.getFullYear();
 
     const tomorrow = new Date(now);
     tomorrow.setDate(now.getDate() + 1);
