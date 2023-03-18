@@ -9,7 +9,7 @@ import timer from '../Assets/timer.png'
 function getGoalsArray(userData,userLoggedIn,currMonth,currYear){
     if(userLoggedIn && Object.keys(userData.goals[currMonth]).length !== 0 && userData.goals[currMonth][currYear]){
         const dates = Object.keys(userData.goals[currMonth][currYear])
-        return dates.filter((date)=>!userData.goals[currMonth][currYear][date].status)
+        return dates.filter((date)=>!userData.goals[currMonth][currYear][date].status && !userData.goals[currMonth][currYear][date].time_expired)
     }
     else {
         return []

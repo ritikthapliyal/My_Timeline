@@ -35,6 +35,10 @@ export const editGoal = createAsyncThunk('user/editGoal', async(data) =>{
     const response = await api.editGoal(data)
     return response.data
 })
+export const addSubtask = createAsyncThunk('user/addSubtask', async(data) =>{
+    const response = await api.addSubtask(data)
+    return response.data
+})
 export const addTask = createAsyncThunk('user/addTask', async(data) =>{
     const response = await api.addTask(data)
     return response.data
@@ -69,6 +73,7 @@ const initialState = {
     addTaskStatus : "",
     doneTaskStatus : "",
     resetDataStatus: "",
+    addSubtaskStatus: "",
         
     todaysTasks: [],
 }
@@ -83,6 +88,26 @@ const userSlice = createSlice({
         setFirstTimeLogin(state){
             state.firstTimeLogin = false
         },
+
+        updateGoalsInFrontend(state,{payload}){
+
+            const today = payload.today
+            const month = payload.month
+            const year = payload.year
+
+            const userData = state.userData
+
+            if(
+                Object.keys(userData.goals[month]).length !== 0 && 
+                userData.goals[month][year] &&
+                userData.goals[month][year][today] &&
+                !userData.goals[month][year][today].status
+            ){
+                userData.goals[month][year][today].time_expired = true
+            }
+
+            state.userData = userData
+        }
 
     },
     extraReducers:{
@@ -153,6 +178,17 @@ const userSlice = createSlice({
         
                                                     
         //////////////////////////////////////////////////////////////////////////////
+        
+        [addSubtask.pending]:(state)=>{ return {...state,addSubtaskStatus:"pending"}},
+        [addSubtask.rejected] : (state) => { return {...state,addSubtaskStatus:"rejected"}},
+        [addSubtask.fulfilled] : (state,{payload}) => {
+                                                        const {index,newSubTask} = payload.result
+                                                        state.addSubtaskStatus = "success"
+                                                        state.todaysTasks[index].subtasks.push(newSubTask)
+                                                    },
+        
+                                                    
+        //////////////////////////////////////////////////////////////////////////////
 
         [doneTask.pending]:(state)=>{ return {...state,doneTaskStatus:"pending"}},
         [doneTask.rejected] : (state) => { return {...state,doneTaskStatus:"rejected"}},
@@ -165,10 +201,11 @@ const userSlice = createSlice({
         [resetData.pending]:(state)=>{ return {...state,resetDataStatus:"pending"}},
         [resetData.rejected] : (state) => { return {...state,resetDataStatus:"rejected"}},
         [resetData.fulfilled] : (state,{payload}) => {  state.userData = payload.result 
-                                                        state.todaysTasks = []},
+                                                        state.resetDataStatus="success"
+                                                        state.todaysTasks = payload.result.todaysTasks},
     }
 })
 
 
 export default userSlice.reducer 
-export const {setFirstTimeLogin} = userSlice.actions
+export const {setFirstTimeLogin,updateGoalsInFrontend} = userSlice.actions

@@ -1,7 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState, Fragment } from 'react'
 import "./Today.css"
 import {useDispatch, useSelector} from 'react-redux'
-import { addTask, doneTask } from '../../Redux/userSlice'
+import { addTask, doneTask, addSubtask } from '../../Redux/userSlice'
 
 
 const color = [  {back:"#e8deee",color:"#412454"},  
@@ -24,10 +24,11 @@ function Today() {
     const pendingDiv = useRef()
     const {todaysTasks,userData} = useSelector((state)=> state.userSlice)
     const [showDoneTasks,setShowDoneTasks] = useState(false)
-    const [showPendingTasks,setShowPendingTasks] = useState(false)
     const [task,setTask] = useState("")
+    const [subtask,setSubtask] = useState("")
     const [showLine,setShowLine] = useState(-1)
-
+    const [selectedTaskIndex, setSelectedTaskIndex] = useState(-1);
+    const [showSubtask,setShowSubtask] = useState(false)
 
     let lastIndex = 0
     function pickColor(){
@@ -40,9 +41,16 @@ function Today() {
     }
 
     const handleAddTask = ()=>{
-        const newTask = {task,status:false}
+        const newTask = {task,status:false,subtasks:[]}
         dispatch(addTask({_id:userData._id,newTask})).then(setTask(""))
     }
+    const handleAddSubtask = (e)=>{
+        e.stopPropagation()
+        const newSubTask = {subtask,status:false}
+        dispatch(addSubtask({_id:userData._id,index:selectedTaskIndex,newSubTask})).then(setSubtask(""))
+    }
+
+
     const handleDoneTask=(index)=>{
         dispatch(doneTask({_id:userData._id,index}))
     }
@@ -51,7 +59,6 @@ function Today() {
     const handleCheckbox = (index)=>{
         if(movePending.includes(index)){
             const newMovePending = movePending.filter(ind=>index !== ind)
-            console.log(newMovePending)
             setMovePending(newMovePending)
         }
         else{
@@ -59,9 +66,10 @@ function Today() {
         }
     }
     
-    const [selectedTaskIndex, setSelectedTaskIndex] = useState(null);
+    
 
-    function handleClick(event,index) {
+    function handleClick(index) {
+        setShowSubtask(false)
         setSelectedTaskIndex(index)
     }
 
@@ -98,7 +106,7 @@ function Today() {
     useEffect(()=>{},[todaysTasks])
 
     return (
-        <div className='Today'>
+        <div className='Today' onMouseLeave={()=>{setShowSubtask(false);setSelectedTaskIndex(-1)}}>
 
             <button className='flip-page' onClick={()=>{setShowDoneTasks(!showDoneTasks)}}>
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -116,9 +124,11 @@ function Today() {
                     <div className='prev-pending-tasks-inputs'>
                         {
                             userData.pendingTasks.map(({task},index)=>{
-                                return <div className='prev-pending-tasks-input'>
+                                const checked = movePending.includes(index)
+                                return <div key={index} className='prev-pending-tasks-input' 
+                                            style={{backgroundColor : checked ? "wheat" : "white"}}>
                                     <input  type="checkbox" 
-                                            checked={movePending.includes(index)} 
+                                            checked={checked} 
                                             onChange={()=>handleCheckbox(index)}></input>
                                     <label>{task}</label>
                                 </div>
@@ -126,8 +136,10 @@ function Today() {
                         }
                     </div>
                     <div className='prev-pending-tasks-buttons'>
-                        <button>Add Selected</button>
                         <button>Add All</button>
+                        <button>Add Selected</button>
+                        <button>Remove All</button>
+                        <button>Remove Selected</button>
                     </div>
             </div>
         
@@ -137,7 +149,7 @@ function Today() {
                     <h2>Today's Goals</h2>
                 </div>  
 
-                <div className='TASKS-container'>
+                <div className='TASKS-container' onClick={()=>{setShowSubtask(false);setSelectedTaskIndex(-1)}}>
                     {
                         todaysTasks.length > 0 && atleastOneNotDone()
                         ? todaysTasks.map((todoTasks,index)=>{ 
@@ -146,30 +158,76 @@ function Today() {
                                 return  <div key={index} 
                                              className='TASKS' 
                                              style={{backgroundColor : color[cindex].back}}>
-                                             <p onClick={(e) => handleClick(e,index)} 
+                                             <p onClick={(e) => {e.stopPropagation();handleClick(index)}} 
                                                 style={{color:color[cindex].color}}>{todoTasks.task}</p>
-                                             {
-                                                selectedTaskIndex === index && <ul onMouseLeave={()=>setSelectedTaskIndex(false)} className='tasks-menu'>
+
+                                                {
+                                                    todoTasks.subtasks.length > 0 && <ul className='subtasks-container'>
+                                                        {
+                                                            todoTasks.subtasks.map(subt=>{
+                                                                return <li>
+                                                                    <input
+                                                                    type="checkbox"
+                                                                    >
+                                                                    </input>
+                                                                    <label>{subt.subtask}</label>
+                                                                </li>
+                                                            })
+                                                        }
+                                                    </ul>
+                                                }
+                                                {
+                                                selectedTaskIndex === index && !showSubtask ? <ul 
+                                                        className='tasks-menu'
+                                                        style={{transform : selectedTaskIndex === index ? "scaleY(1)" : "scaleY(0)"}}
+                                                        onMouseLeave={()=>{setSelectedTaskIndex(-1);setShowSubtask(false)}}>
                                                     <li>
-                                                        <button onClick={()=>handleDoneTask(index)}>
+                                                        <button onClick={(e) => {e.stopPropagation();handleDoneTask(index)}}>
                                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.2" stroke="currentColor" class="w-6 h-6">
                                                             <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                                             </svg>
                                                         </button>
                                                     </li>
                                                     <li>
-                                                        <button>
+                                                        <button onClick={(e) => {e.stopPropagation();}}>
                                                         <svg width="24" height="24" stroke-width="1" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5.45887 2L1 6.01478L2.33826 7.50107L6.79713 3.48629L5.45887 2Z" fill="currentColor" /><path d="M11 8H13V12H16V14H11V8Z" fill="currentColor" /><path fill-rule="evenodd" clip-rule="evenodd" d="M3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12ZM5 12C5 8.13401 8.13401 5 12 5C15.866 5 19 8.13401 19 12C19 15.866 15.866 19 12 19C8.13401 19 5 15.866 5 12Z" fill="currentColor" /><path d="M18.5411 2L23 6.01478L21.6617 7.50107L17.2029 3.48629L18.5411 2Z" fill="currentColor" /></svg>
                                                         </button>
                                                     </li>
                                                     <li>
-                                                        <button>
+                                                        <button onClick={(e) => {e.stopPropagation();}}>
                                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="w-6 h-6">
                                                             <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
                                                             </svg>
                                                         </button>
                                                     </li>
+                                                    <li>
+                                                        <button onClick={(e) => {e.stopPropagation();setShowSubtask(true)}}>
+                                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 5C3 5.55228 3.44772 6 4 6H20C20.5523 6 21 5.55228 21 5C21 4.44772 20.5523 4 20 4H4C3.44772 4 3 4.44772 3 5Z" fill="currentColor" /><path d="M12 20C12.5523 20 13 19.5523 13 19V16H16C16.5523 16 17 15.5523 17 15C17 14.4477 16.5523 14 16 14H13V11C13 10.4477 12.5523 10 12 10C11.4477 10 11 10.4477 11 11V14H8C7.44772 14 7 14.4477 7 15C7 15.5523 7.44772 16 8 16H11V19C11 19.5523 11.4477 20 12 20Z" fill="currentColor" /></svg>
+                                                        </button>
+                                                    </li>
                                                 </ul>
+                                                :    
+                                                selectedTaskIndex === index &&  
+                                                                                <Fragment>
+                                                                                <input
+                                                                                value={subtask}
+                                                                                onClick={(e) => e.stopPropagation()}
+                                                                                onChange={(e)=>{setSubtask(e.target.value)}}
+                                                                                style={{
+                                                                                        padding: '.4rem',
+                                                                                        width: '90%',
+                                                                                        transform: 'translateX(10%)',
+                                                                                        outline:"none",
+                                                                                        border: "none",
+                                                                                        marginBottom: ".2rem"
+                                                                                    }}  
+                                                                                placeholder='Enter Subtask'></input>
+                                                                                <button className='add-subtask'
+                                                                                        onClick={(e)=>handleAddSubtask(e)}
+                                                                                        style={{backgroundColor:color[cindex].color,
+                                                                                                color : color[cindex].back}}
+                                                                                >Add</button>
+                                                                            </Fragment>
                                             }
                                         </div>
                             }})
@@ -190,7 +248,7 @@ function Today() {
                     }
                 </div>
 
-                <div className='input-task'>
+                <div className='input-task' onClick={()=>setSelectedTaskIndex(-1)}>
                     <input placeholder='Enter Task' type="text" onChange={(e)=>{setTask(e.target.value)}} value={task}></input>
                     <button onClick={()=>handleAddTask()}>
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.3" stroke="currentColor" class="w-6 h-6">

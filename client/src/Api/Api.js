@@ -14,4 +14,5 @@ export function resetData(data){return axios.get(`${user}${data}`)}
 
 
 export function addTask(data){return axios.post(user + 'Task',data)}
+export function addSubtask(data){return axios.patch(user + 'Task/Subtask',data)}
 export function doneTask(data){return axios.patch(user + 'Task',data)}

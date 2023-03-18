@@ -4,17 +4,12 @@ import cron from 'cron'
 
 
 // const job = new cron.CronJob('0 0 * * *', () => {
-const job = new cron.CronJob('59 23 * * *', async () => {
+const job = new cron.CronJob('0 0 * * *', async () => {
 
     const now = new Date();
-    const currentDate = now.getDate();
-    const currentMonth = now.getMonth();
-
-    const tomorrow = new Date(now);
-    tomorrow.setDate(now.getDate() + 1);
-    const tomorrowDate = now.getDate();
-    const tomorrowMonth = now.getMonth();
-    const tomorrowYear = now.getFullYear();
+    const currentDate = now.getDate()
+    const currentMonth = now.getMonth()
+    const currentYear = now.getFullYear()
 
     const users = await User.find({});
     
@@ -44,9 +39,9 @@ const job = new cron.CronJob('59 23 * * *', async () => {
 
             }
 
-            if(user.goals[tomorrowMonth][tomorrowYear][tomorrowDate] && !user.goals[tomorrowMonth][tomorrowYear][tomorrowDate].status){
-                user.goals[tomorrowMonth][tomorrowYear][tomorrowDate].time_expired = true
-                user.goals[tomorrowMonth][tomorrowYear][tomorrowDate].status = false
+            if(user.goals[currentMonth][currentYear][currentDate] && !user.goals[currentMonth][currentYear][currentDate].status){
+                user.goals[currentMonth][currentYear][currentDate].time_expired = true
+                user.goals[currentMonth][currentYear][currentDate].status = false
                 user.markModified('goals');
             }
 
@@ -229,6 +224,35 @@ export const addTask = async (req,res)=>{
         }
 
 }
+export const addSubtask = async (req,res)=>{
+    
+        const {_id,index,newSubTask} = req.body
+
+        console.log(req.body)
+
+        try{
+
+            const user = await User.findById(_id);
+
+            if (!user) {
+                return res.status(404).json({ error: 'User not found' });
+            }
+
+            user.todaysTasks[index].subtasks.push(newSubTask);
+            user.markModified('todaysTasks')
+
+            console.log(user.todaysTasks)
+
+            await user.save();
+
+            return res.status(201).json({result : {index,newSubTask}});
+        }
+        catch(error){
+            console.error(error);
+            return res.status(500).json({ error: 'Server error' });
+        }
+
+}
 export const doneTask = async (req,res)=>{
     
         const {_id,index} = req.body
@@ -254,7 +278,7 @@ export const resetData = async(req,res) => {
     const _id = req.params.id
 
     try{
-        let user = await User.findOne({_id})        
+        let user = await User.findOne({_id},{password:0})        
         return res.status(200).json({result:user})
     }
     catch{

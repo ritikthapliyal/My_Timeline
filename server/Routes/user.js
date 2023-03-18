@@ -1,5 +1,5 @@
 import express from 'express'
-import {addUser,verifyUser,setGoal, deleteGoal, editGoal, addTask, doneTask, resetData, doneGoal} from '../controllers/user.js'
+import {addUser,verifyUser,setGoal, deleteGoal, editGoal, addTask, doneTask, resetData, doneGoal, addSubtask} from '../controllers/user.js'
 
 const user = express.Router();
 
@@ -15,5 +15,6 @@ user.post('/verify',verifyUser)
 
 user.post('/Task',addTask)
 user.patch('/Task',doneTask)
+user.patch('/Task/Subtask',addSubtask)
 
 export default user

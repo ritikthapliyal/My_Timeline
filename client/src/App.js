@@ -4,7 +4,7 @@ import Deadline from './Components/Deadline';
 import Header from './Components/Header/Header';
 import MyDiary from './Components/MyDiary/MyDiary';
 import { changePage, updateDate} from './Redux/uiSlice';
-import {setFirstTimeLogin,resetData} from './Redux/userSlice';
+import {setFirstTimeLogin,resetData,updateGoalsInFrontend} from './Redux/userSlice';
 import RightScreen from './Components/RightScreen/RightScreen';
 import { useSelector,useDispatch } from 'react-redux';
 import { useEffect } from 'react';
@@ -20,19 +20,18 @@ function App() {
 
 
     const handleMoveButtons = (direction) => {
-
         if(firstTimeLogin){
             dispatch(setFirstTimeLogin())
         }
-
         dispatch(changePage(direction))
     }
 
     useEffect(() => {
-        const job = schedule.scheduleJob("0 0 * * *", () => {
+        const job = schedule.scheduleJob({hour: 0, minute: 5, tz: 'Asia/Kolkata'}, () => {
           if (userLoggedIn) {
-            dispatch(resetData(userData._id))
             dispatch(updateDate())
+            dispatch(updateGoalsInFrontend(today))
+            dispatch(resetData(userData._id))
           }
         })
     
@@ -107,7 +106,7 @@ function App() {
                                        borderRadius: "20%",                                     
                                 }}>
                                 </span>
-                                <p><span style={{color:"#2146C7", fontWeight:"600"}}>Congratulations !!</span>. <br/>You have Achieved Your Goal.</p>
+                                <p><span style={{color:"#03C988", fontWeight:"600"}}>Congratulations !!</span>. <br/>You have Achieved Your Goal.</p>
                             </div>
                             <div>
                                 <span className='cross-span' style={{
