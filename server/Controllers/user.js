@@ -161,7 +161,7 @@ export const doneGoal = async (req,res)=>{
     
     const {_id,date,month,year} = req.body.data
 
-    console.log(_id,date,month,year)
+    // console.log(_id,date,month,year)
 
     try{
     
@@ -228,7 +228,7 @@ export const addSubtask = async (req,res)=>{
     
         const {_id,index,newSubTask} = req.body
 
-        console.log(req.body)
+        // console.log(req.body)
 
         try{
 
@@ -241,7 +241,7 @@ export const addSubtask = async (req,res)=>{
             user.todaysTasks[index].subtasks.push(newSubTask);
             user.markModified('todaysTasks')
 
-            console.log(user.todaysTasks)
+            // console.log(user.todaysTasks)
 
             await user.save();
 
